@@ -42,7 +42,7 @@ function getTitle(n) {
         n = 0;
     }
     var title = "Fusekle #" + (PUZZLE_NUMBER + n);
-    title += " (" + getSolution().solution.length + " moves";
+    title += " (" + getSolution().length + " moves";
     if (!oneColor) {
         title += ", blind start";
     }
@@ -50,8 +50,7 @@ function getTitle(n) {
     return title;
 }
 function getSolution() {
-    const oldPuzzle = puzzles[PUZZLE_NUMBER % puzzles.length]; //old puzzles
-    return {"node_id": null, "solution": oldPuzzle};
+    return puzzles[PUZZLE_NUMBER % puzzles.length];
 }
 
 /* functions to get inputted sequence from besogo */
@@ -157,8 +156,7 @@ function submit() {
     if (moves.length === 0) {
         return;
     }
-    const puzzle = getSolution();
-    const solution = puzzle.solution;
+    const solution = getSolution();
     if (moves.length > solution.length) {
         showPopup();
         return;
@@ -213,8 +211,7 @@ function submit() {
 }
 
 function startOneColorMode() {
-    const puzzle = getSolution();
-    const solution = puzzle.solution;
+    const solution = getSolution();
     const editor = getInputEditor();
     for (var i = solution.length - 1; i >= 0; i--) {
         var move = solution[i];
@@ -251,11 +248,6 @@ function tryRestore() {
     const dark = storageLoad("dark");
     if (dark === "on") {
         document.querySelector('button[title="Toggle dark theme"]').click();
-    }
-    const zoom = storageLoad("zoom");
-    if (zoom) {
-        const editor = getInputEditor();
-        editor.setZoom(zoom);
     }
     const saved = storageLoad(getTitle());
     if (saved && saved["submissions"] !== null && saved["submissions"].length > 0) {
@@ -294,9 +286,6 @@ window.onload = function() {
     initModal();
     document.querySelector("div#title").innerText=getTitle();
     getInputEditor().addListener(function(msg) {
-        if (msg.zoom) {
-            storageSave("zoom", msg.zoom);
-        }
         if (msg.dark === false || msg.dark === true) {
             const value = msg.dark ? "on" : "off";
             storageSave("dark", value);

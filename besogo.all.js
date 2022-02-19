@@ -1653,7 +1653,7 @@ besogo.makeEditor = function(sizeX, sizeY) {
         // Order of coordinate systems
         COORDS = 'none numeric western eastern pierre corner eastcor'.split(' '),
         coord = 'none', // Selected coordinate system
-        zoom = 1.6, // Board zoom ratio
+        zoom = 1.0, // Board zoom ratio
 
         // Possible zoom ratios when using increase and decrease functions
         ZOOM_STEPS = [1.0, 1.3, 1.5, 1.6, 1.75, 1.9],
