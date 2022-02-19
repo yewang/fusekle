@@ -1,0 +1,48 @@
+html, body {
+    padding: 0px;
+    margin: 0px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    height: 100vh;
+    width: 100vw;
+}
+
+@-moz-document url-prefix() {
+    body, html {
+        height: 100%;
+        width: 100%;
+    }
+}
+
+.besogo-container {
+    height: 100%;
+    width: 100%;
+}
+
+.besogo-hint {
+    font-family: Georgia, serif;
+    font-size: 12pt;
+    white-space: pre-wrap;
+
+    overflow: auto;
+    flex: 1 1 35%;
+    width: 100%;
+
+    /* Code for aligning hints to bottom (but works poorly on mobile Safari)
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end
+    */
+}
+
+#output p {
+    margin: 0px;
+    padding: 1px 0px;
+}
+
+#dictionary-board, .none {
+    display: none;
+}
+.hidden {
+    visibility: hidden;
+}

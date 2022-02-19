@@ -1,0 +1,238 @@
+/*
+MIT License
+
+Copyright (c) 2015-2018 Ye Wang
+https://yewang.github.io/besogo/
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+.besogo-container {
+    outline: none;
+    display: flex;
+    background: #d0fefe;
+}
+
+.besogo-container * {
+    box-sizing: border-box;
+}
+
+.besogo-container button {
+    height: 30px;
+    width: 30px;
+    padding: 0px;
+    background: #d8dcd6;
+    font-size: 12pt;
+    color: black;
+    border-color: #f5f5f5 #e6e6e6 #e6e6e6 #f5f5f5;
+}
+
+.besogo-container input {
+    font-size: 12pt;
+}
+
+.besogo-container input[type='button'] {
+    background: #d8dcd6;
+    color: black;
+    border-color: #f5f5f5 #e6e6e6 #e6e6e6 #f5f5f5;
+}
+
+.besogo-container input[type='text'] {
+    width: 30px;
+}
+
+.besogo-container svg { /* Prevent text selection within SVG */
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none;   /* Chrome/Safari/Opera */
+    -moz-user-select: none;      /* Firefox */
+    -ms-user-select: none;       /* Internet Explorer/Edge */
+     user-select: none;
+}
+
+.besogo-panels {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0px 5px;
+}
+
+.besogo-panels > * {
+    padding: 2px 0px;
+    margin: 0px;
+}
+
+.besogo-control {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    width: 100%;
+
+    flex: 0 0 auto;
+}
+
+.besogo-names {
+    flex: 0 0 auto;
+    width: 100%;
+}
+
+.besogo-playerInfo {
+    display: flex;
+    font-family: Tahoma, Geneva, sans-serif;
+    white-space: pre-wrap;
+}
+
+.besogo-blackInfo {
+    flex: 50%;
+    color: white;
+    background: black;
+    text-align: right;
+    padding: 5px;
+}
+
+.besogo-whiteInfo {
+    flex: 50%;
+    color: black;
+    background: white;
+    text-align: left;
+    padding: 5px;
+}
+
+.besogo-blackCaps {
+    float: left;
+}
+
+.besogo-whiteCaps {
+    float: right;
+}
+
+.besogo-comment {
+    font-family: Georgia, serif;
+    font-size: 12pt;
+    white-space: pre-wrap;
+
+
+    overflow: auto;
+    flex: 1 1 60%;
+    width: 100%;
+}
+
+.besogo-comment input[type='button'] {
+    float: right;
+}
+
+.besogo-comment textarea {
+    height: 100%;
+    width: 100%;
+}
+
+.besogo-gameInfo {
+    padding: 5px;
+    border-collapse: collapse;
+}
+
+.besogo-gameInfo td, tr {
+    border: 1px solid black;
+    padding: 3px;
+}
+
+.besogo-nav-select {
+    fill: #d0fefe;
+}
+
+.besogo-tool {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    width: 100%;
+
+    flex: 0 0 auto;
+}
+
+.besogo-tree {
+    overflow: auto;
+    flex: 1 1 40%;
+    width: 100%;
+}
+
+.besogo-file {
+    flex: 0 0 auto;
+}
+
+/* Flat board theme */
+
+.besogo-svg-board {
+    fill: #ebb660;
+}
+
+.besogo-svg-lines {
+    stroke: #343837;
+    stroke-width: 3;
+    fill: none;
+}
+
+.besogo-svg-hoshi {
+    stroke: #1b2431;
+    stroke-width: 12;
+}
+
+.besogo-svg-blackStone {
+    fill: #252525;
+    stroke: #252525;
+    stroke-width: 4;
+}
+
+.besogo-svg-whiteStone {
+    fill: #eeeeee;
+    stroke: #eeeeee;
+    stroke-width: 4;
+}
+
+.besogo-svg-greyStone {
+    fill: #929591;
+    stroke: #929591;
+    stroke-width: 4;
+}
+
+.besogo-black-label {
+    fill: #eeeeee;
+}
+
+.besogo-white-label {
+    fill: #252525;
+}
+
+.besogo-variant-label {
+    fill: #ff474c;
+}
+
+.besogo-svg-correct {
+    stroke: #16a34a;
+    stroke-width: 12;
+}
+
+.besogo-svg-hint {
+    stroke: #6d28d9;
+    stroke-width: 12;
+}
+
+.besogo-svg-miss {
+    stroke: #e50000;
+    stroke-width: 8;
+}
