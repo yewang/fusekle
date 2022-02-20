@@ -56,8 +56,8 @@ function getSolution() {
 /* functions to get inputted sequence from besogo */
 function extractMovesFrom(current) {
     var moves=[];
-    if (current.markup.length > 0) {
-        return []; // Detects if there are already hints
+    if (current.submitted) {
+        return []; // Skip if already submitted
     }
     while (current.move !== null) {
         moves.push({x:current.move.x, y:current.move.y});
@@ -215,9 +215,9 @@ function startOneColorMode() {
     const editor = getInputEditor();
     for (var i = solution.length - 1; i >= 0; i--) {
         var move = solution[i];
-        editor.getRoot().addMarkup(move.x,move.y,2);
+        editor.getRoot().addMarkup(move.x, move.y, 2);
     }
-    editor.toggleVariantStyle(); // toggles a redraw
+    editor.setVariantStyle(editor.getVariantStyle()); // toggles a redraw
 }
 
 /* functions to save and restore previous attempts */
@@ -291,8 +291,8 @@ window.onload = function() {
             storageSave("dark", value);
         }
     })
-    const restored = tryRestore();
-    if (oneColor && !restored) {
+    if (oneColor) {
         startOneColorMode();
     }
+    tryRestore();
 };

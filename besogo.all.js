@@ -800,6 +800,15 @@ besogo.makeBoardDisplay = function(container, editor) {
                                 element = besogo.svgBlock(x, y, color);
                                 break;
                         }
+                        if (mark < 0) { // Negative markup is green hint
+                            if (!stone) { // If placing label on empty spot
+                                element = makeBacker(x, y);
+                                group.appendChild(element);
+                            }
+                            element = besogo.svgLabel(x, y, color, -mark + '');
+                            group.appendChild(element);
+                            element = besogo.svgCircle(x, y, color);
+                        }
                     } else { // Markup is a label
                         if (!stone) { // If placing label on empty spot
                             element = makeBacker(x, y);
@@ -867,7 +876,7 @@ besogo.makeBoardDisplay = function(container, editor) {
             if (variants[i] !== current) { // Skip current (within siblings)
                 move = variants[i].move;
                 // Check if move, not a pass, and no mark yet
-                if (move && move.x !== 0 && !markupLayer[ fromXY(move.x, move.y) ]) {
+                if (move && move.x !== 0 && current.getMarkup(move.x, move.y) >= 0) {
                     stone = current.getStone(move.x, move.y);
                     x = svgPos(move.x); // Get SVG positions
                     y = svgPos(move.y);
@@ -2106,6 +2115,15 @@ besogo.makeEditor = function(sizeX, sizeY) {
                 // Keep (add to game state tree) only if move succeeds
                 current.addChild(next);
                 current = next;
+                if (current.getMarkup(i, j) < 0) { // If there is a green hint
+                    if ( -current.getMarkup(i, j) !== getMoveNumber(current)) {
+                        // Clear green hint if inconsistent
+                        current.addMarkup(i, j, 0);
+                    }
+                } else if (current.getMarkup(i, j) === 2) {
+                    // Clear purple hints as they are played
+                    current.addMarkup(i, j, 0);
+                }
                 // Notify tree change, navigation, and stone change
                 notifyListeners({ treeChange: true, navChange: true, stoneChange: true });
             }
@@ -2113,6 +2131,15 @@ besogo.makeEditor = function(sizeX, sizeY) {
         } else if(current.playMove(i, j, color, allowAll)) { // Play in current
             // Only need to update if move succeeds
             notifyListeners({ stoneChange: true }); // Stones changed
+        }
+
+        function getMoveNumber(node) {
+            var i = 0;
+            while (node.parent) {
+                node = node.parent;
+                i++;
+            }
+            return i;
         }
     }
 
@@ -2201,10 +2228,11 @@ besogo.makeEditor = function(sizeX, sizeY) {
         path.reverse();
 
         for (i = 0; i < path.length; i++) {
+            path[i].submitted = true;
             node = path[i].move;
             if (i < solution.length && node.x === solution[i].x && node.y === solution[i].y) {
                 hints.push(GREEN);
-                setHints(path, i, 1);
+                setHints(path, i, -(i + 1));
             } else if (solution.find(move => move.x === node.x && move.y === node.y)) {
                 hints.push(YELLOW);
                 setHints(path, i, 2);
@@ -2391,9 +2419,9 @@ besogo.makeGameRoot = function(sizeX, sizeY) {
         node.parent = parent;
         node.children = [];
 
+        node.submitted = false;
         node.move = null;
         node.setupStones = [];
-        node.markup = [];
         node.comment = ''; // Comment on this node
     }
     initNode(root, null); // Initialize root node with null parent
@@ -2572,11 +2600,11 @@ besogo.makeGameRoot = function(sizeX, sizeY) {
         if (x < 1 || y < 1 || x > sizeX || y > sizeY) {
             return false; // Do not allow out of bounds markup
         }
-        if (!this.parent && this.getMarkup(x, y) === 1) {
+        if (!this.parent && this.getMarkup(x, y) < 0) {
             // Avoids overwriting green with yellow in root
             return false;
         }
-        this.markup[ fromXY(x, y) ] = mark;
+        this['markup' + x + '-' + y] = mark;
         return true;
     };
 
@@ -2608,7 +2636,7 @@ besogo.makeGameRoot = function(sizeX, sizeY) {
 
     // Gets the markup at (x, y)
     root.getMarkup = function(x, y) {
-        return this.markup[ fromXY(x, y) ] || EMPTY;
+        return this['markup' + x + '-' + y]  || EMPTY;
     };
 
     // Returns the best hint type
@@ -3895,18 +3923,14 @@ besogo.makeTreePanel = function(container, editor) {
         if (node.move) {
             hint = node.getMarkup(node.move.x, node.move.y);
         }
-        switch(hint) {
-            case 1:
-                hint = besogo.svgCircle(svgPos(x), svgPos(y), color)
-                break;
-            case 2:
-                hint = besogo.svgSquare(svgPos(x), svgPos(y), color)
-                break;
-            case 3:
-                hint = besogo.svgTriangle(svgPos(x), svgPos(y), color)
-                break;
-            default:
-                hint = 0
+        if (hint === 1 || hint < 0) {
+            hint = besogo.svgCircle(svgPos(x), svgPos(y), color)
+        } else if (hint === 2) {
+            hint = besogo.svgSquare(svgPos(x), svgPos(y), color)
+        } else if (hint === 3) {
+            hint = besogo.svgTriangle(svgPos(x), svgPos(y), color)
+        } else {
+            hint = 0;
         }
 
         switch(node.getType()){
