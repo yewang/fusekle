@@ -57,7 +57,8 @@ function getSolution() {
 function extractMovesFrom(current) {
     var moves=[];
     if (current.submitted) {
-        return []; // Skip if already submitted
+        showPopup("Already submitted");
+        return [];
     }
     while (current.move !== null) {
         moves.push({x:current.move.x, y:current.move.y});
@@ -93,6 +94,7 @@ function share() {
     text += "\n";
     text += "https://yewang.github.io/fusekle/";
     navigator.clipboard.writeText(text);
+    showPopup("Copied to clipboard");
 }
 function makeButton(value, title, onclick) {
     element = document.createElement('input');
@@ -143,9 +145,10 @@ function display(hints, message) {
     scrollHints();
 }
 
-function showPopup() {
+function showPopup(text) {
     var popup = document.querySelector("#notify");
     popup.classList.add("active");
+    document.getElementById('notify-text').innerText = text;
     setTimeout(function(){
         popup.classList.remove("active");
     }, 1200);
@@ -158,7 +161,7 @@ function submit() {
     }
     const solution = getSolution();
     if (moves.length > solution.length) {
-        showPopup();
+        showPopup("Too many moves");
         return;
     }
     var hints = getInputEditor().check(solution);
