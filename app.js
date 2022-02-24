@@ -1,12 +1,17 @@
 const debug = window.location.href.includes("debug=true");
-const oneColor = !window.location.href.includes("oneColor=false");
 const clearStorage = window.location.href.includes("clearStorage=true");
+var oneColor = storageLoad('oneColor') === null ? true : storageLoad('oneColor');
 var circles = ["🟢","⚪","🟣"];
 const GREEN = "🟢";
 const WHITE = "⚪";
 const YELLOW = "🟣";
 const TODAY = new Date();
 const START = new Date(2022, 1, 19);
+
+function toggleOneColor() {
+    storageSave('oneColor', !oneColor);
+    window.location.reload();
+}
 
 /* functions for emoji support detection */
 function supportsEmoji (e) {
