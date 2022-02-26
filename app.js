@@ -42,21 +42,74 @@ function getNumber() {
     return Math.ceil(Math.abs((START - TODAY) / dayMillis));
 }
 const PUZZLE_NUMBER = getNumber();
+
+function createRand(seed) {
+    var m = 134456;
+    var a = 8121;
+    var c = 28411;
+
+    var z = seed || 42;
+    return function() {
+        z = (a * z + c) % m;
+        return z;
+    };
+}
+
+function getSolution() {
+    var rand,
+        puzzle,
+        i, a, b, c;
+
+    if (PUZZLE_NUMBER >= puzzles.length) {
+        rand = createRand(Math.floor(PUZZLE_NUMBER / puzzles.length))
+        puzzles = shuffle(puzzles);
+    }
+    puzzle = puzzles[PUZZLE_NUMBER % puzzles.length];
+
+    rand = createRand(PUZZLE_NUMBER); // Reinit for puzzle flip
+    // Flip three coins for random reorientation
+    a = rand() % 2;
+    b = rand() % 2;
+    c = rand() % 2;
+    for (i = 0; i < puzzle.length; i++) {
+        if (a) { // Mirror x axis
+            puzzle[i].x = 10 - puzzle[i].x;
+        }
+        if (b) { // Mirror y axis
+            puzzle[i].y = 10 - puzzle[i].y;
+        }
+        if (c) { // Transpose
+            puzzle[i].x, puzzle[i].y = puzzle[i].y, puzzle[i].x
+        }
+    }
+
+    function shuffle(array) {
+        let currentIndex = array.length, randomIndex;
+        while (currentIndex != 0) {
+            randomIndex = rand() % currentIndex;
+            currentIndex--;
+            [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+        }
+        return array;
+    }
+
+    return puzzle;
+}
+const solution = getSolution();
+
 function getTitle(n) {
     if (typeof n === "undefined") {
         n = 0;
     }
     var title = "Fusekle #" + (PUZZLE_NUMBER + n);
-    title += " (" + getSolution().length + " moves";
+    title += " (" + solution.length + " moves";
     if (!oneColor) {
         title += ", blind start";
     }
     title += ")";
     return title;
 }
-function getSolution() {
-    return puzzles[PUZZLE_NUMBER % puzzles.length];
-}
+
 
 /* functions to get inputted sequence from besogo */
 function extractMovesFrom(current) {
@@ -164,7 +217,6 @@ function submit() {
     if (moves.length === 0) {
         return;
     }
-    const solution = getSolution();
     if (moves.length > solution.length) {
         showPopup("Too many moves");
         return;
@@ -219,7 +271,6 @@ function submit() {
 }
 
 function startOneColorMode() {
-    const solution = getSolution();
     const editor = getInputEditor();
     for (var i = solution.length - 1; i >= 0; i--) {
         var move = solution[i];
