@@ -1,10 +1,10 @@
 const debug = window.location.href.includes("debug=true");
 const clearStorage = window.location.href.includes("clearStorage=true");
 var oneColor = storageLoad('oneColor') === null ? true : storageLoad('oneColor');
-var circles = ["👟","🦶","🧦"];
-const GREEN = "👟";
-const WHITE = "🦶";
-const YELLOW = "🧦";
+var circles = ["🟢","⚪","🟣"];
+const GREEN = "🟢";
+const WHITE = "⚪";
+const YELLOW = "🟣";
 const TODAY = new Date();
 const START = new Date(2022, 1, 19);
 
@@ -101,7 +101,7 @@ function getTitle(n) {
     if (typeof n === "undefined") {
         n = 0;
     }
-    var title = "Fu🧦le #" + (PUZZLE_NUMBER + n);
+    var title = "Fusekle🧦 #" + (PUZZLE_NUMBER + n);
     title += " (" + solution.length + " moves";
     if (!oneColor) {
         title += ", blind start";
